@@ -93,9 +93,12 @@ def exec_proxmark_cmd(command, retry = 2, input=""):
         proxmark_reply = rst.stdout.decode("utf-8")
         proxmark_status = proxmark_reply.splitlines()[-1:][0].strip()
         if proxmark_status == "ok":
-            return True, "Success: " + proxmark_status
+            return True, f"Success: {proxmark_status}"
         retry_c += 1
-    return False, "Error: %s , status %s" % (proxmark_reply.splitlines()[-2:][0], proxmark_status)
+    return (
+        False,
+        f"Error: {proxmark_reply.splitlines()[-2:][0]} , status {proxmark_status}",
+    )
 
 
 def chunk(iterable,n):
@@ -104,7 +107,7 @@ def chunk(iterable,n):
     iterable=iter(iterable)
     while True:
         result=[]
-        for i in range(n):
+        for _ in range(n):
             try:
                 a=next(iterable)
             except StopIteration:
@@ -116,32 +119,50 @@ def chunk(iterable,n):
         else:
             break
 
-sector_array = [sector for sector in chunk(EML_FILE_DATA.splitlines(), 4)]
+sector_array = list(chunk(EML_FILE_DATA.splitlines(), 4))
 block = 0
 block_success = {}
 
 for sector in sector_array:
     key_A = sector[3][:12]
     key_B = sector[3][-12:]
-    for _block in range(0,4):
+    for _block in range(4):
         if sector_array.index(sector) == 0 and block == 0:
-            write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -b -k %s -d %s" % (block, key_B, sector[0]))
+            write_status, verbose = exec_proxmark_cmd(
+                f"hf mf wrbl --blk {block} -b -k {key_B} -d {sector[0]}"
+            )
+
             if not write_status:
-                write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -a -k %s -d %s" % (block, key_A, sector[0]))
+                write_status, verbose = exec_proxmark_cmd(
+                    f"hf mf wrbl --blk {block} -a -k {key_A} -d {sector[0]}"
+                )
+
             if not write_status:
-                write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -a -k %s -d %s" % (block, F12_KEY, sector[0]))
+                write_status, verbose = exec_proxmark_cmd(
+                    f"hf mf wrbl --blk {block} -a -k {F12_KEY} -d {sector[0]}"
+                )
+
             block_success[block] = verbose
 
         elif _block == 3:
-            write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -b -k %s -d %s" % (block, key_B, DEFAULT_ACCESS_BLOCK))
+            write_status, verbose = exec_proxmark_cmd(
+                f"hf mf wrbl --blk {block} -b -k {key_B} -d {DEFAULT_ACCESS_BLOCK}"
+            )
+
             if not write_status:
-                write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -a -k %s -d %s" % (block, key_A, DEFAULT_ACCESS_BLOCK))
+                write_status, verbose = exec_proxmark_cmd(
+                    f"hf mf wrbl --blk {block} -a -k {key_A} -d {DEFAULT_ACCESS_BLOCK}"
+                )
+
             if not write_status:
-                write_status, verbose = exec_proxmark_cmd("hf mf wrbl --blk %s -a -k %s -d %s" % (block, F12_KEY, DEFAULT_ACCESS_BLOCK))
+                write_status, verbose = exec_proxmark_cmd(
+                    f"hf mf wrbl --blk {block} -a -k {F12_KEY} -d {DEFAULT_ACCESS_BLOCK}"
+                )
+
             block_success[block] = verbose
 
         _block += 1
         block += 1
 
-for block in block_success:
-    print("Block %s: %s" % (block ,block_success[block]))
+for block, value in block_success.items():
+    print(f"Block {block}: {value}")

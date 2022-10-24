@@ -24,7 +24,7 @@ table = [0] * 256
 LOOK_UP(table)
 
 # Function to find the parity
-def Parity(num) :
+def Parity(num):
     # Number is considered to be of 32 bits
     max = 16
 
@@ -32,7 +32,7 @@ def Parity(num) :
     # chunks while performing X-OR
     while (max >= 8):
         num = num ^ (num >> max)
-        max = max // 2
+        max //= 2
 
     # Masking the number with 0xff (11111111)
     # to produce valid 8-bit result

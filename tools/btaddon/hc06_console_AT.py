@@ -9,7 +9,7 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 if len(sys.argv) < 2:
-    print('Usage: %s <baudrate>' % sys.argv[0])
+    print(f'Usage: {sys.argv[0]} <baudrate>')
     sys.exit(1)
 baudrate = int(sys.argv[1])
 ser = serial.Serial(

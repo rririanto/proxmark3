@@ -44,7 +44,7 @@ pm3_proc = Popen([pm3_client, pm3_reader_dev_file, "-c", pm3_tune_cmd],
 mv_recbuf = ""
 
 # Read voltages from the Proxmark3, generate the sine wave, output to soundcard
-sample_buf = [0.0 for x in range(0, sample_buf_size)]
+sample_buf = [0.0 for _ in range(sample_buf_size)]
 i = 0
 sinev = 0
 while True:

@@ -68,7 +68,7 @@ def parse_keys(file):
     for line in file:
         key = key_regex.match(line)
         try:
-            key = key.group(0).upper()
+            key = key[0].upper()
             keys.add(key)
         except AttributeError:
             pass

@@ -21,25 +21,25 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 if len(sys.argv) != 2:
-    print("Usage: %s <basename>" % sys.argv[0])
+    print(f"Usage: {sys.argv[0]} <basename>")
     sys.exit(1)
 
 BASENAME = sys.argv[1]
 
-nx = numpy.fromfile(BASENAME + ".time")
+nx = numpy.fromfile(f"{BASENAME}.time")
 
 def plot_time(dat1):
     plt.plot(nx, dat1)
 
-sig = bytearray(open(BASENAME + ".filtered", 'rb').read())
-min_vals = bytearray(open(BASENAME + ".min", 'rb').read())
-max_vals = bytearray(open(BASENAME + ".max", 'rb').read())
-states = bytearray(open(BASENAME + ".state", 'rb').read())
-toggles = bytearray(open(BASENAME+ ".toggle", 'rb').read())
-high = bytearray(open(BASENAME + ".high", 'rb').read())
-highz = bytearray(open(BASENAME + ".highz", 'rb').read())
-lowz = bytearray(open(BASENAME + ".lowz", 'rb').read())
-low = bytearray(open(BASENAME + ".low", 'rb').read())
+sig = bytearray(open(f"{BASENAME}.filtered", 'rb').read())
+min_vals = bytearray(open(f"{BASENAME}.min", 'rb').read())
+max_vals = bytearray(open(f"{BASENAME}.max", 'rb').read())
+states = bytearray(open(f"{BASENAME}.state", 'rb').read())
+toggles = bytearray(open(f"{BASENAME}.toggle", 'rb').read())
+high = bytearray(open(f"{BASENAME}.high", 'rb').read())
+highz = bytearray(open(f"{BASENAME}.highz", 'rb').read())
+lowz = bytearray(open(f"{BASENAME}.lowz", 'rb').read())
+low = bytearray(open(f"{BASENAME}.low", 'rb').read())
 
 plot_time(sig)
 plot_time(min_vals)

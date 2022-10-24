@@ -13,7 +13,7 @@ dbname = "tools/data.json"
 try:
     db = json.load(open(dbname,"r"))
 except FileNotFoundError:
-    db = dict()
+    db = {}
 
 if len(sys.argv) < 3:
     print("Usage: analyzesize.py <info|add|diff> <datasetname>")
