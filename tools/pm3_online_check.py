@@ -259,8 +259,7 @@ def main():
             match_slow = line.find('slow clock..............')
 
             if match_slow > -1:
-                match = re.search(r'\d+', line)
-                if match:
+                if match := re.search(r'\d+', line):
                     clock = int(match[0])
                     if clock < 29000:
                         print("[-] Warning, Slow clock too slow (%d Hz)" % (clock), color('[FAIL]', fg='red'))
@@ -277,9 +276,8 @@ def main():
         child.expect(pexpect.EOF)
         return
 
-    if must_update_fw == 1:
-        if pm3_flash_sm(child):
-            res += 1
+    if must_update_fw == 1 and pm3_flash_sm(child):
+        res += 1
 
     try:
         print("[=] starting antenna tune tests,  this takes some time and plot window will flash up...")
@@ -397,8 +395,8 @@ def main():
             child.sendline('hf iclass rdbl -b 10 --ki 0')
             i = child.expect('pm3 --> ')
             msg = escape_ansi(str(child.before))
+            iclass_read = 'block 10'.lower()
             for line in msg.splitlines():
-                iclass_read = 'block 10'.lower()
                 if iclass_read in line:
                     res += 1
                     print("[+] HF ICLASS RDBL ", color('[OK]', fg='green'))
@@ -411,7 +409,7 @@ def main():
                     if iclass_write in msg:
                         res += 1
                         print("[+] HF ICLASS WRBL ", color('[OK]', fg='green'))
-                        child.sendline('hf iclass wrbl -b 10 --ki 0 -d %s' % (old_b10))
+                        child.sendline(f'hf iclass wrbl -b 10 --ki 0 -d {old_b10}')
                         i = child.expect('pm3 --> ')
                     else:
                         print("[-] HF ICLASS WRBL ", color('[FAIL]', fg='red'))

@@ -62,11 +62,11 @@ def hitag2_init(key, uid, nonce):
     state = 0
     for i in range(32, 48):
         state = (state << 1) | ((key >> i) & 1)
-    for i in range(0, 32):
+    for i in range(32):
         state = (state << 1) | ((uid >> i) & 1)
     #print '%012x' % state
     #print '%012x' % (int("{0:048b}".format(state)[::-1],2))
-    for i in range(0, 32):
+    for i in range(32):
         nonce_bit = (f20(state) ^ ((nonce >> (31-i)) & 1))
         #print nonce_bit
         state = (state >> 1) | (((nonce_bit ^ (key >> (31-i))) & 1) << 47)
@@ -97,7 +97,7 @@ def lfsr_inv(state):
 
 def hitag2(state, length=48):
     c = 0
-    for i in range(0, length):
+    for _ in range(length):
         c = (c << 1) | f20(state)
         #print '%012x' % state
         #print '%012x' % (int("{0:048b}".format(state)[::-1],2))
@@ -110,9 +110,9 @@ if __name__ == "__main__":
         key = int(sys.argv[1], 16)
         uid = int(sys.argv[2], 16)
         n = int(sys.argv[3])
-        for i in range(n):
+        for _ in range(n):
             nonce = random.randrange(2**32)
             state = hitag2_init(key, uid, nonce)
             print('%08X %08X' % (nonce, hitag2(state, 32)^0xffffffff))
     else:
-        print("Usage: python %s <key> <uid> <nr of nRaR to generate>" % sys.argv[0])
+        print(f"Usage: python {sys.argv[0]} <key> <uid> <nr of nRaR to generate>")

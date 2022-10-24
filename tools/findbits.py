@@ -48,14 +48,14 @@ def domatch(binary,number):
     reversed= stringreverse(number)
     inverted= invert(binary)
 
-    print('  Forward: (%s) ' % number, end = '')
+    print(f'  Forward: ({number}) ', end = '')
     search(binary,number)
-    print('  Reverse: (%s) ' % reversed, end = '')
+    print(f'  Reverse: ({reversed}) ', end = '')
     search(binary,reversed)
-    print('  Inverse: (%s) ' % inverted)
-    print('    Forward: (%s) ' % number, end = '')
+    print(f'  Inverse: ({inverted}) ')
+    print(f'    Forward: ({number}) ', end = '')
     search(inverted,number)
-    print('    Reverse: (%s) ' % reversed, end = '')
+    print(f'    Reverse: ({reversed}) ', end = '')
     search(inverted,reversed)
 
 def main():

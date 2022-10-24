@@ -75,9 +75,15 @@ def build_help_regex():
     re_options = r'(?:options:\n(?P<options>(?:.+\n)+)\n+)?'
     # Reads the notes and examples
     re_notes = r'(?:examples\/notes:\n(?P<notes>(?:.+\n)+)\n+)?'
-    # Combine them into a single regex object
-    re_full = re.compile(re_command+re_offline+re_description+re_usage+re_options+re_notes, re.MULTILINE);
-    return re_full
+    return re.compile(
+        re_command
+        + re_offline
+        + re_description
+        + re_usage
+        + re_options
+        + re_notes,
+        re.MULTILINE,
+    )
 
 
 def parse_all_command_data(help_text):

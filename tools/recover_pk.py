@@ -175,18 +175,18 @@ def selftests():
                 print("[OK]")
             else:
                 succeeded = False
-                print("[FAIL], got %s" % pk.lower())
+                print(f"[FAIL], got {pk.lower()}")
         elif len(t['samples'])//2 == 1:
             pks = [binascii.hexlify(pk).decode('utf8').lower() for pk in list(recovered)]
             if t['pk'].lower() in pks:
                 print("[OK] (partial)")
             else:
                 succeeded = False
-                print("[FAIL], got %s" % pks)
+                print(f"[FAIL], got {pks}")
         else:
             succeeded = False
             print("[FAIL]")
-    print("Tests:                           [%s]" % ["FAIL", "OK"][succeeded])
+    print(f'Tests:                           [{["FAIL", "OK"][succeeded]}]')
 
 
 if __name__ == "__main__":
@@ -202,8 +202,7 @@ if __name__ == "__main__":
     curvenames = guess_curvename(sigs[0])
     for c in curvenames:
         for h in [None, "md5", "sha1", "sha256", "sha512"]:
-            recovered = recover_multiple(uids, sigs, c, alghash=h)
-            if recovered:
+            if recovered := recover_multiple(uids, sigs, c, alghash=h):
                 if once:
                     print(color('curve=%s', fg='yellow') % c)
                     once = False
